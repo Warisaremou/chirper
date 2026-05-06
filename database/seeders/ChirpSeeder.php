@@ -16,7 +16,6 @@ class ChirpSeeder extends Seeder
         {
             $users->random()->chirps()->create([
                 'message' => fake()->text(),
-                'created_at' => now()->subMinutes(rand(5, 1440)),
             ]);
         }
     }
