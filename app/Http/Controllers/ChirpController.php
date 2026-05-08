@@ -70,6 +70,10 @@ class ChirpController extends Controller
      */
     public function update(Request $request, Chirp $chirp)
     {
+        // if ($request->user()->cannot('update', $chirp)) {
+        //     abort(403);
+        // }
+
         $validated = $request->validate([
             'message' => ['required', 'string', 'min:5', 'max:255'],
         ]);
@@ -82,8 +86,12 @@ class ChirpController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Chirp $chirp)
+    public function destroy(Request $request, Chirp $chirp)
     {
+        // if ($request->user()->cannot('delete', $chirp)) {
+        //     abort(403);
+        // }
+
         $chirp->deleteOrFail();
 
         return redirect('/')->with('success', 'Chirp deleted!');
