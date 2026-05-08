@@ -29,14 +29,15 @@
                             rows="4"
                             maxlength="255"
                         >{{ old('message') }}</textarea>
+                        
+                        {{-- Field error message --}}
+                        @error('message')
+                            <div class="mt-1">
+                                <span class="text-xs text-red-500">{{ $message }}</span>
+                            </div>
+                        @enderror
                     </div>
 
-                    {{-- Field error message --}}
-                    @error('message')
-                        <div class="mt-1">
-                            <span class="text-xs text-red-500">{{ $message }}</span>
-                        </div>
-                    @enderror
 
                     <div class="mt-4 flex items-center justify-end">
                         <button type="submit" class="btn btn-primary btn-sm">
