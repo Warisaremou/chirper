@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chirp;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -15,7 +16,7 @@ class ChirpController extends Controller
     {
         $chirps = Chirp::with('user')
             ->latest()
-            ->take(50)
+            ->take(4)
             ->get();
     
         return view('home', ['chirps' => $chirps]);
@@ -32,9 +33,20 @@ class ChirpController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        $validated = $request->validate([
+            'message' => ['required', 'string', 'min:5', 'max:255'],
+        ], [
+            'message.required' => 'Please write something to chirp!',
+        ]);
+
+        Chirp::create([
+            'message' => $validated['message'],
+            'user_id' => null,
+        ]);
+        
+        return redirect('/')->with('success', 'Chirp created successfully!');
     }
 
     /**
