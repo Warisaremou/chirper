@@ -18,7 +18,7 @@ class ChirpController extends Controller
             ->latest()
             ->take(4)
             ->get();
-    
+
         return view('home', ['chirps' => $chirps]);
     }
 
@@ -41,11 +41,8 @@ class ChirpController extends Controller
             'message.required' => 'Please write something to chirp!',
         ]);
 
-        Chirp::create([
-            'message' => $validated['message'],
-            'user_id' => null,
-        ]);
-        
+        auth()->user()->chirps()->create($validated);
+
         return redirect('/')->with('success', 'Chirp created successfully!');
     }
 
@@ -60,8 +57,12 @@ class ChirpController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Chirp $chirp): View
+    public function edit(Request $request, Chirp $chirp): View
     {
+        if ($request->user()->cannot('update', $chirp)) {
+            abort(403);
+        }
+
         return view('chirps.edit', compact('chirp'));
     }
 
@@ -70,9 +71,9 @@ class ChirpController extends Controller
      */
     public function update(Request $request, Chirp $chirp)
     {
-        // if ($request->user()->cannot('update', $chirp)) {
-        //     abort(403);
-        // }
+        if ($request->user()->cannot('delete', $chirp)) {
+            abort(403);
+        }
 
         $validated = $request->validate([
             'message' => ['required', 'string', 'min:5', 'max:255'],
@@ -88,9 +89,9 @@ class ChirpController extends Controller
      */
     public function destroy(Request $request, Chirp $chirp)
     {
-        // if ($request->user()->cannot('delete', $chirp)) {
-        //     abort(403);
-        // }
+        if ($request->user()->cannot('delete', $chirp)) {
+            abort(403);
+        }
 
         $chirp->deleteOrFail();
 
