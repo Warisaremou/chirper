@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\Login;
 use App\Http\Controllers\Auth\Logout;
+use App\Http\Controllers\Auth\Profile;
 use App\Http\Controllers\Auth\Register;
 use App\Http\Controllers\ChirpController;
 use Illuminate\Support\Facades\Route;
@@ -31,3 +32,8 @@ Route::post('/login', Login::class)
 Route::post('/logout', Logout::class)
     ->middleware('auth')
     ->name('logout');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/settings', [Profile::class, 'index'])->name('profile');
+    Route::patch('/profile/edit', [Profile::class, 'edit'])->name('profile.edit');
+});
