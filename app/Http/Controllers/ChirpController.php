@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chirp;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -12,12 +13,15 @@ class ChirpController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
         $chirps = Chirp::with('user')
+            ->when($request->query('search'), function (Builder $query, string $searchParam) {
+                $query->whereLike('message', "%{$searchParam}%");
+            })
             ->latest()
-            ->take(4)
-            ->get();
+            ->paginate(5)
+            ->withQueryString();
 
         return view('home', ['chirps' => $chirps]);
     }
