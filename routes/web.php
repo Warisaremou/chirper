@@ -36,4 +36,6 @@ Route::post('/logout', Logout::class)
 Route::middleware('auth')->group(function () {
     Route::get('/settings', [Profile::class, 'index'])->name('profile');
     Route::patch('/profile/edit', [Profile::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/edit/avatar', [Profile::class, 'editAvatar'])->name('profile.edit.avatar');
+    Route::get('/profile/avatar', [Profile::class, 'showAvatar'])->name('profile.show.avatar');
 });

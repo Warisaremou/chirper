@@ -1,5 +1,18 @@
 @props(['user'])
 
+<div class="relative flex flex-col gap-2 mb-6">
+    <div class="size-22 overflow-hidden rounded-full flex items-center">
+        <img src="{{ route('profile.show.avatar') }}" alt="{{ $user->name }}'s avatar" class="object-cover">
+    </div>
+    <form action="{{ route('profile.edit.avatar') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <input type="file" name="avatar" class="absolute inset-0 size-22 opacity-0" accept="image/*">
+        <button type="submit" class="btn btn-primary btn-xs">
+            Update avatar
+        </button>
+    </form>
+</div>
+
 <form method="POST" action="{{ route('profile.edit') }}">
     @csrf
     @method('PATCH')

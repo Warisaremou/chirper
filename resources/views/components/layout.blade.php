@@ -45,13 +45,22 @@
         <div class="navbar-end gap-2">
             @auth
                 <a href="{{ route('profile') }}" class="avatar avatar-placeholder">
-                    <div class="bg-neutral text-neutral-content w-8 rounded-full">
-                        <span>@avatar(auth()->user()->name)</span>
-                    </div>
+                    @if (auth()->user()->avatarUrl)
+                        <div class="avatar">
+                            <div class="size-10 rounded-full">
+                                <img src="{{ route('profile.show.avatar') }}" alt="{{ auth()->user()->name }}'s avatar" />
+                            </div>
+                        </div>
+                    @else
+                        <div class="bg-neutral text-neutral-content size-10 rounded-full">
+                            <span>@avatar(auth()->user()->name)</span>
+                        </div>
+                    @endif
                 </a>
                 <form method="POST" action="{{ route('logout') }}" class="inline">
                     @csrf
-                    <button type="submit" class="btn btn-ghost btn-sm">Logout</button>
+                    <button type="submit"
+                        class="btn text-red-600 bg-transparent hover:bg-transparent btn-sm">Logout</button>
                 </form>
             @else
                 <a href="{{ route('login') }}" class="btn btn-ghost btn-sm">Sign In</a>

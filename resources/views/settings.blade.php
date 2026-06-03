@@ -15,6 +15,17 @@
                     <span>{{ session('success') }}</span>
                 </div>
             </div>
+        @elseif (session('error'))
+            <div class="toast toast-top toast-center">
+                <div class="alert alert-error animate-fade-out">
+                    <svg xmlns="<http://www.w3.org/2000/svg>" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.736-3L13.736 5c-.768-1.333-2.7-1.333-3.464 0L3.34 16c-.766 1.333 .195 3 1.735 3z" />
+                    </svg>
+                    <span>{{ session('error') }}</span>
+                </div>
+            </div>
         @endif
 
         <div class="tabs tabs-border">
