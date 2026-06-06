@@ -101,4 +101,38 @@ class ChirpController extends Controller
 
         return redirect('/')->with('success', 'Chirp deleted!');
     }
+
+    /**
+     * Add a chirp to likes.
+     */
+    public function like(Request $request, string $chirpId)
+    {
+        $chirp = Chirp::findOrFail($chirpId);
+
+        if ($request->user()->cannot('like', $chirp)) {
+            abort(403);
+        }
+
+        auth()->user()->likes()->attach($chirp->id);
+        return redirect('/')->with('success', 'Chirp added to likes!');
+    }
+
+    /**
+     * Unlike a chirp.
+     */
+    public function unlike(Request $request, string $chirpId)
+    {
+        $chirp = Chirp::findOrFail($chirpId);
+
+        if ($request->user()->cannot('unlike', $chirp)) {
+            abort(403);
+        }
+
+        try {
+            auth()->user()->likes()->detach($chirp->id);
+            return redirect('/')->with('success', 'Chirp removed from likes!');
+        } catch (\Throwable $th) {
+            return redirect('/')->with('error', 'Failed to remove chirp from likes.');
+        }
+    }
 }

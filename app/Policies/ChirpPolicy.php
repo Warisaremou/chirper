@@ -63,4 +63,25 @@ class ChirpPolicy
     {
         return $chirp->user()->is($user);
     }
+
+    /**
+     * User can like only others chirps
+     */
+    public function like(User $user, Chirp $chirp): bool
+    {
+        return $chirp->user()->isNot($user);
+    }
+
+    /**
+     * User can only unlike chirps they have liked
+     */
+    public function unlike(User $user, Chirp $chirp): bool
+    {
+        return $user->likes()
+            ->where([
+                'user_chirp_likes.user_id' => $user->id,
+                'user_chirp_likes.chirp_id' => $chirp->id
+            ])
+            ->exists();
+    }
 }

@@ -12,8 +12,13 @@ Route::resource('chirps', ChirpController::class)->only([
     'store',
     'edit',
     'update',
-    'destroy'
+    'destroy',
 ])->middleware('auth');
+
+Route::controller(ChirpController::class)->group(function () {
+    Route::post('/chirps/{chirp}/like', 'like')->name('chirp.like');
+    Route::post('/chirps/{chirp}/unlike', 'unlike')->name('chirp.unlike');
+})->middleware('auth');
 
 Route::view('/register', 'auth.register')
     ->middleware('guest')
@@ -33,9 +38,9 @@ Route::post('/logout', Logout::class)
     ->middleware('auth')
     ->name('logout');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/settings', [Profile::class, 'index'])->name('profile');
-    Route::patch('/profile/edit', [Profile::class, 'edit'])->name('profile.edit');
-    Route::post('/profile/edit/avatar', [Profile::class, 'editAvatar'])->name('profile.edit.avatar');
-    Route::get('/profile/avatar', [Profile::class, 'showAvatar'])->name('profile.show.avatar');
-});
+Route::controller(Profile::class)->group(function () {
+    Route::get('/settings', 'index')->name('profile');
+    Route::patch('/profile/edit', 'edit')->name('profile.edit');
+    Route::post('/profile/edit/avatar', 'editAvatar')->name('profile.edit.avatar');
+    Route::get('/profile/avatar', 'showAvatar')->name('profile.show.avatar');
+})->middleware('auth');

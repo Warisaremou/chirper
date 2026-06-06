@@ -15,8 +15,12 @@ class Profile extends Controller
 
     public function index(): View
     {
+        $user = auth()->user();
+        $likes = $user->likes()->with('user')->get();
+
         return view('settings', [
-            'user' => auth()->user(),
+            'user' => $user,
+            'likes' => $likes,
         ]);
     }
 
