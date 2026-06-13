@@ -42,7 +42,7 @@ Route::controller(Profile::class)->group(function () {
     Route::get('/settings', 'index')->name('profile');
     Route::patch('/profile/edit', 'edit')->name('profile.edit');
     Route::post('/profile/edit/avatar', 'editAvatar')->name('profile.edit.avatar');
-    Route::get('/profile/avatar', 'showAvatar')->name('profile.show.avatar');
+    Route::get('/profile/avatar/{user}', 'showAvatar')->name('profile.show.avatar');
     Route::post('/profile/follow/{user}', 'follow')->name('profile.follow');
     Route::post('/profile/unfollow/{user}', 'unfollow')->name('profile.unfollow');
 })->middleware('auth');

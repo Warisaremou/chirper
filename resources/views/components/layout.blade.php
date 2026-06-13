@@ -45,17 +45,7 @@
         <div class="navbar-end gap-2">
             @auth
                 <a href="{{ route('profile') }}" class="avatar avatar-placeholder">
-                    @if (auth()->user()->avatarUrl)
-                        <div class="avatar">
-                            <div class="size-10 rounded-full">
-                                <img src="{{ route('profile.show.avatar') }}" alt="{{ auth()->user()->name }}'s avatar" />
-                            </div>
-                        </div>
-                    @else
-                        <div class="bg-neutral text-neutral-content size-10 rounded-full">
-                            <span>@avatar(auth()->user()->name)</span>
-                        </div>
-                    @endif
+                    <x-ui.avatar :user="auth()->user()" />
                 </a>
                 <form method="POST" action="{{ route('logout') }}" class="inline">
                     @csrf

@@ -2,7 +2,7 @@
 
 <div class="relative flex flex-col gap-2 mb-6">
     <div class="size-22 overflow-hidden rounded-full flex items-center">
-        <img src="{{ route('profile.show.avatar') }}" alt="{{ $user->name }}'s avatar" class="object-cover">
+        <img src="{{ route('profile.show.avatar', $user) }}" alt="{{ $user->name }}'s avatar" class="object-cover">
     </div>
     <form action="{{ route('profile.edit.avatar') }}" method="POST" enctype="multipart/form-data">
         @csrf

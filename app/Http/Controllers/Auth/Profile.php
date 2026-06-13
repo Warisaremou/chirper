@@ -62,10 +62,8 @@ class Profile extends Controller
         return back()->with('success', 'Avatar uploaded successfully.');
     }
 
-    public function showAvatar(): BinaryFileResponse
+    public function showAvatar(User $user): BinaryFileResponse
     {
-        $user = auth()->user();
-
         if (!$user->avatarUrl || false === Storage::exists($user->avatarUrl)) {
             abort(404);
         }
