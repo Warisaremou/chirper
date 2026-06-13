@@ -99,7 +99,7 @@ class ChirpController extends Controller
 
         $chirp->deleteOrFail();
 
-        return redirect('/')->with('success', 'Chirp deleted!');
+        return back()->with('success', 'Chirp deleted!');
     }
 
     /**
@@ -114,7 +114,7 @@ class ChirpController extends Controller
         }
 
         auth()->user()->likes()->attach($chirp->id);
-        return redirect('/')->with('success', 'Chirp added to likes!');
+        return back()->with('success', 'Chirp added to likes!');
     }
 
     /**
@@ -130,9 +130,9 @@ class ChirpController extends Controller
 
         try {
             auth()->user()->likes()->detach($chirp->id);
-            return redirect('/')->with('success', 'Chirp removed from likes!');
+            return back()->with('success', 'Chirp removed from likes!');
         } catch (\Throwable $th) {
-            return redirect('/')->with('error', 'Failed to remove chirp from likes.');
+            return back()->with('error', 'Failed to remove chirp from likes.');
         }
     }
 }

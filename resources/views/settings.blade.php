@@ -43,6 +43,11 @@
             <div class="tab-content border-base-300 bg-base-100 p-10">
                 <x-setting-liked-chirps :likes="$likes" />
             </div>
+
+            <input type="radio" name="my_tabs_2" class="tab" aria-label="My connections" />
+            <div class="tab-content border-base-300 bg-base-100 p-10">
+                <x-setting-user-connections :followers="$followers" :followings="$followings" />
+            </div>
         </div>
     </div>
 </x-layout>

@@ -7,7 +7,7 @@ use App\Http\Controllers\Auth\Register;
 use App\Http\Controllers\ChirpController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [ChirpController::class, 'index']);
+Route::get('/', [ChirpController::class, 'index'])->name('home');
 Route::resource('chirps', ChirpController::class)->only([
     'store',
     'edit',
@@ -43,4 +43,6 @@ Route::controller(Profile::class)->group(function () {
     Route::patch('/profile/edit', 'edit')->name('profile.edit');
     Route::post('/profile/edit/avatar', 'editAvatar')->name('profile.edit.avatar');
     Route::get('/profile/avatar', 'showAvatar')->name('profile.show.avatar');
+    Route::post('/profile/follow/{user}', 'follow')->name('profile.follow');
+    Route::post('/profile/unfollow/{user}', 'unfollow')->name('profile.unfollow');
 })->middleware('auth');

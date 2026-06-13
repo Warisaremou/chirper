@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -17,10 +18,14 @@ class Profile extends Controller
     {
         $user = auth()->user();
         $likes = $user->likes()->with('user')->get();
+        $followers = $user->followers;
+        $followings = $user->followings;
 
         return view('settings', [
             'user' => $user,
             'likes' => $likes,
+            'followers' => $followers,
+            'followings' => $followings,
         ]);
     }
 
@@ -54,7 +59,7 @@ class Profile extends Controller
         $path = $validated[self::FILE_INPUT_KEY]->store('uploads');
         $user->update(['avatarUrl' => $path]);
 
-        return redirect('settings')->with('success', 'Avatar uploaded successfully.');
+        return back()->with('success', 'Avatar uploaded successfully.');
     }
 
     public function showAvatar(): BinaryFileResponse
@@ -70,5 +75,31 @@ class Profile extends Controller
             ->setPublic()
             ->setMaxAge(0)
             ->setPrivate();
+    }
+
+    /**
+     * Follow a user.
+     */
+    public function follow(Request $request, User $user): RedirectResponse
+    {
+        if ($request->user()->cannot('follow', $user)) {
+            return back()->with('error', 'You cannot follow yourself.');
+        }
+
+        auth()->user()->followings()->syncWithoutDetaching([$user->id]);
+        return back()->with('success', "You are now following {$user->name}.");
+    }
+
+    /**
+     * Unfollow a user profile.
+     */
+    public function unfollow(Request $request, User $user): RedirectResponse
+    {
+        if ($request->user()->cannot('unfollow', $user)) {
+            return back()->with('error', 'You cannot unfollow yourself.');
+        }
+
+        auth()->user()->followings()->detach($user->id);
+        return back()->with('success', "You are no longer following {$user->name}.");
     }
 }
