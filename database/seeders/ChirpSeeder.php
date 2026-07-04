@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Chirp;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -11,12 +12,8 @@ class ChirpSeeder extends Seeder
     {
         $users = User::all();
 
-        // Create chirps for random users
-        for ($i = 0; $i < 3; $i++) 
-        {
-            $users->random()->chirps()->create([
-                'message' => fake()->text(),
-            ]);
-        }
+        Chirp::factory()
+            ->count(fake()->numberBetween(40, 50))
+            ->create(['user_id' => fn() => $users->random()->id]);
     }
 }

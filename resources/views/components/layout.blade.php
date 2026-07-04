@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    {{-- Vapid Public Key to enable Web Push Notifications --}}
+    <meta name="vapid-public-key" content="{{ config('webpush.vapid.public_key') }}">
     <title>{{ isset($title) ? $title . ' - Chirper' : 'Chirper' }}</title>
     <link rel="preconnect" href="<https://fonts.bunny.net>">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700" rel="stylesheet" />
@@ -44,6 +47,7 @@
         </div>
         <div class="navbar-end gap-2">
             @auth
+                <x-notifications :user="auth()->user()" />
                 <a href="{{ route('profile') }}" class="avatar avatar-placeholder">
                     <x-ui.avatar :user="auth()->user()" />
                 </a>
@@ -65,7 +69,7 @@
     </main>
 
     <footer class="w-full mt-24">
-        <div class="mx-auto w-full max-w-[1400px] px-4 xl:px-16">
+        <div class="mx-auto w-full max-w-350 px-4 xl:px-16">
             <svg class="block w-full h-auto text-base-content opacity-8" viewBox="0 0 1280 308" aria-hidden="true"
                 focusable="false">
                 <path d="M50.2753 0H0V308.689H144.713V263.27H50.2753V0Z" fill="currentColor" />

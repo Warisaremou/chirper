@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\NotificationTypeEnum;
 use App\Models\Chirp;
+use App\Notifications\ChirpInteraction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -108,12 +110,15 @@ class ChirpController extends Controller
     public function like(Request $request, string $chirpId)
     {
         $chirp = Chirp::findOrFail($chirpId);
+        $user = auth()->user();
 
         if ($request->user()->cannot('like', $chirp)) {
             abort(403);
         }
 
-        auth()->user()->likes()->attach($chirp->id);
+        $user->likes()->attach($chirp->id);
+        $chirp->user->notify(new ChirpInteraction(NotificationTypeEnum::LikedChirp, $user, $chirp));
+
         return back()->with('success', 'Chirp added to likes!');
     }
 

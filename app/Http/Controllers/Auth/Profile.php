@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\NotificationTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Notifications\ChirpInteraction;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -85,6 +87,8 @@ class Profile extends Controller
         }
 
         auth()->user()->followings()->syncWithoutDetaching([$user->id]);
+        $user->notify(new ChirpInteraction(NotificationTypeEnum::NewFollow, auth()->user()));
+
         return back()->with('success', "You are now following {$user->name}.");
     }
 
