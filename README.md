@@ -77,3 +77,5 @@ composer run dev
 ```
 
 App runs at `http://localhost:8000`
+
+View api doc at `http://localhost:8000/docs/api`
